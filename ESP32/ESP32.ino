@@ -11,9 +11,9 @@
 
 AsyncWebServer server(80);
 
-#define REPORTING_PERIOD_MS 1000
+#define timer 1000
 PulseOximeter pox;
-uint32_t lastReport = 0;
+uint32_t previousTime = 0;
 float heartRate = 0;
 float spo2 = 0;
 DFRobot_DHT11 DHT;
@@ -147,10 +147,10 @@ void loop(void) {
    pox.update();
 
   
-  if (millis() - lastReport > REPORTING_PERIOD_MS) {
+  if (millis() - previousTime > timer) {
     heartRate = pox.getHeartRate();
     spo2 = pox.getSpO2();
     Serial.printf("Heart Rate: %.1f bpm | SpO2: %.1f%%\n", heartRate, spo2);
-    lastReport = millis();
+   previousTime = millis();
   }
 }
